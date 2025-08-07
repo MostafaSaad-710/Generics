@@ -1,214 +1,170 @@
-﻿using System.Runtime.InteropServices;
-using System.Xml.Linq;
-
-namespace demo
+﻿namespace Assignment
 {
     internal class Program
     {
+        #region Q01
+
+        internal class Range<T> where T : IComparable<T>
+        {
+            private T Max, Min;
+
+            public bool IsInRange(T value)
+            {
+                return value.CompareTo(Min) >= 0 && value.CompareTo(Max) <= 0;
+            }
+
+            public double Length()
+            {
+                try
+                {
+                    double maxVal = Convert.ToDouble(Max);
+                    double minVal = Convert.ToDouble(Min);
+                    return maxVal - minVal;
+                }
+                catch
+                {
+                    throw new InvalidOperationException("Type T must be convertible to double to calculate Length.");
+                }
+
+            }
+
+
+            public Range(T max, T min)
+            { Max = max; Min = min; }
+            public override string ToString()
+            { return $"Max: {Max} , Min: {Min}"; }
+
+        }
+        #endregion
+
+        #region Q02
+        public static void SWAP<T>(ref T X, ref T Y)
+        {
+            T Temp = X;
+            X = Y;
+            Y = Temp;
+        }
+        public static void ArrayList<T>(T[] arr) where T : IComparable<T>
+        {
+            if (arr?.Length > 0)
+            {
+                int left = 0;
+                int right = arr.Length - 1;
+                while (left < right)
+                {
+                    SWAP(ref arr[left], ref arr[right]);
+                    left++;
+                    right--;
+                }
+            }
+        }
+        #endregion
+
+        #region Q03
+        public static List<int> GetEvenNumbers(List<int> arr)
+        {
+            List<int> values = new List<int>();
+
+            foreach (int i in arr)
+            {
+                if (i % 2 == 0)
+                {
+                    values.Add(i);
+                }
+            }
+            return values;
+        }
+        #endregion
+
+        #region Q04
+
+        internal class FixedSizeList<T>
+        {
+            public int Capacity, count = 0;
+
+
+            List<T> values = new List<T>();
+
+            public void Add(T n)
+            {
+                if (count < Capacity)
+                {
+                    values.Add(n);
+                    count++;
+                }
+                else
+                {
+                    throw new InvalidOperationException("List is full. Cannot add more items.");
+                }
+
+            }
+
+            public T Get(int n)
+            {
+                if (n >= 0 && n < count)
+                {
+                    return values[n];
+                }
+                else
+                {
+                    throw new IndexOutOfRangeException("Invalid index.");
+                }
+
+            }
+
+            public FixedSizeList(int capacity)
+            { Capacity = capacity; }
+        }
+        #endregion
         static void Main(string[] args)
         {
-            #region Generic Ex01: SWAP
-            // int A = 4, B = 5;
+            #region Q01
+            //Range<int> range = new Range<int>(30, 20);
 
-            //Console.WriteLine("A: A");
-            //Console.WriteLine("B: {B}");
-            //Console.WriteLine("****** After SWAP ******");
+            //Console.WriteLine(range);  
 
-            //Helper<int>.SWAP(ref A, ref B);
+            //Console.WriteLine(range.IsInRange(25));  // true
+            //Console.WriteLine(range.IsInRange(35));  // false
 
-            //Console.WriteLine("A: A");
-            //Console.WriteLine("B: {B}");
-
-            //double L = 1.5, K = 2.6;
-            //Console.WriteLine("L: L");
-            //Console.WriteLine("K: {K}");
-            //Console.WriteLine("****** After SWAP ******");
-
-            //Console.WriteLine("A: A");
-            //Console.WriteLine("B: {B}");
-            //Helper<double>.SWAP(ref L, ref K);
-
-            //Console.WriteLine("L: L");
-            //Console.WriteLine("K: {K}");
-
-            // Point : X, Y
-
-            //Point P01 = new Point( 1,  1);
-            //Point P02 = new Point( 2,  2);
-
-            //Console.WriteLine($"P01: {P01}");
-            //Console.WriteLine($"P02: {P02}");
-
-            //Console.WriteLine("****** After SWAP ******");
-
-            //Helper<Point>.SWAP(ref P01, ref P02);
-
-            //Console.WriteLine($"P01: {P01}");
-            //Console.WriteLine($"P02: {P02}"); 
+            //Console.WriteLine("Length: " + range.Length()); 
             #endregion
 
-            #region Generic Ex02: LinearSearch
+            #region Q02
+            //int[] numbers = { 1, 2, 3, 4, 5 };
 
-            //int[] Numbers = { 8, 7, 6, 1, 2, 3, 4, 5, 6, 12, -1, 13, 9 };
-            //int Index = Helper.LinearSearch(Numbers, 4); // 6
-            ////int Index = Helper.LinearSearch(Numbers, 12); // 9
-            //Console.WriteLine("Index: Index");
+            //Console.WriteLine("Before Reverse:");
+            //foreach (var n in numbers)
+            //    Console.Write(n + " ");
 
-            //Employee E01 = new Employee() { Id = 1, Name = "Ahmed", Salary = 12000, Age = 31 };
-            //Employee E02 = new Employee() { Id = 2, Name = "Ali", Salary = 11000, Age = 34 };
-            //Employee E03 = new Employee() { Id = 3, Name = "Omar", Salary = 13000, Age = 32 };
-            //Employee E04 = new Employee() { Id = 4, Name = "Mona", Salary = 19000, Age = 29 };
+            //ArrayList(numbers);  
 
-            //Employee[] employees = { E01, E02, E03, E04 };
-
-            //int Index = Helper<Employee>.LinearSearch(employees, E03);
-
-            //Console.WriteLine($"Index: {Index}");
-
-            //// With struct
-            //if(E01.Equals(E02))
-            //    Console.WriteLine("E01 == E02");
-
-
+            //Console.WriteLine("\nAfter Reverse:");
+            //foreach (var n in numbers)
+            //    Console.Write(n + " "); 
             #endregion
 
-            #region Equality in Class or Struct
+            #region Q03
+            //List<int> input = new List<int> { 1, 2, 3, 4, 5, 6 };
+            //List<int> result = GetEvenNumbers(input);
 
-            // Equality in Class or Struct
-            // Equals
-            // 'Class' Has Equals Function Which Inherited From Object Class --> Compare Reference ==
-            // 'Struct' Has Equals Function Which Inherited From Object Class --> Compare Data
-            // NOTE: Struct Don't Have Implementation For The == Operator
-
-            //Employee E01 = new Employee() { Id = 1, Name = "Ahmed", Salary = 12000, Age = 31 };
-            //Employee E02 = new Employee() { Id = 1, Name = "Ahmed", Salary = 12000, Age = 31 };
-            ////Employee E02 = new Employee() { Id = 2, Name = "Ali", Salary = 11000, Age = 34 };
-
-            //Console.WriteLine("E01: E01.GetHashCode()");
-            //Console.WriteLine("E02: {E02.GetHashCode()}");
-
-            //if (E01.Equals(E02))
-            //    Console.WriteLine("E01 == E02!");
-            //else
-            //    Console.WriteLine("E01 != E02!");
-
-            //if (E01 == E02)
-            //    Console.WriteLine("E01 == E02!");
-            //else
-            //    Console.WriteLine("E01 != E02!");
-
-            #endregion
-
-            #region Generic Ex01: BubbleSort
-
-            //int[] Numbers = { 2, 3, 9, 8, 7, 6, 5, 4, 1, 12, -1, 0 };
-            //Helper.PrintArray(Numbers);
-            //Console.WriteLine();
-            //Helper.BubbleSort(Numbers); // Sorting Ascending
-            //Helper.PrintArray(Numbers);
-
-            //Point[] points =
+            //foreach (int num in result)
             //{
-            //     new Point (  6,  6 ),
-            //     new Point (  4,  4 ),
-            //     new Point (  3,  3 ),
-            //     new Point (  2,  2 ),
-            //     new Point (  5,  5 ),
-            // };               
-
-            //Helper.PrintArray(points);
-            //Helper.BubbleSort(points);
-            //Helper.PrintArray(points);
-
-
-            //Employee E01 = new Employee() { Id = 1, Name = "Ahmed", Salary = 12000, Age = 31 };
-            //Employee E02 = new Employee() { Id = 2, Name = "Ali", Salary = 11000, Age = 34 };
-            //Employee E03 = new Employee() { Id = 3, Name = "Omar", Salary = 13000, Age = 32 };
-            //Employee E04 = new Employee() { Id = 4, Name = "Mona", Salary = 19000, Age = 29 };
-
-            //Employee[] employees = { E01, E02, E03, E04 };
-
-            //Helper.PrintArray(employees);
-            //Helper.BubbleSort(employees);
-            //Helper.PrintArray(employees); 
+            //    Console.Write(num + " ");
+            //} 
             #endregion
 
-            #region Non Generic ICompareable Vs Ceneric ICompareable
-            //Point[] points =
-            //{
-            //     new Point (  6,  6 ),
-            //     new Point (  4,  4 ),
-            //     new Point (  3,  3 ),
-            //     new Point (  2,  2 ),
-            //     new Point (  5,  5 ),
-            // };               
+            #region Q04
+            //FixedSizeList<string> list = new FixedSizeList<string>(3);
+            //list.Add("One");
+            //list.Add("Two");
+            //list.Add("Three");
 
-            //Helper.PrintArray(points);
-            //Helper.BubbleSort(points);
-            //Helper.PrintArray(points);
+            //Console.WriteLine(list.Get(0));
+            //Console.WriteLine(list.Get(1));
+            //Console.WriteLine(list.Get(2));
 
-            //Employee E01 = new Employee() { Id = 1, Name = "Ahmed", Salary = 12000, Age = 31 };
-            //Employee E02 = new Employee() { Id = 2, Name = "Ali", Salary = 11000, Age = 34 };
-            //Employee E03 = new Employee() { Id = 3, Name = "Omar", Salary = 13000, Age = 32 };
-            //Employee E04 = new Employee() { Id = 4, Name = "Mona", Salary = 19000, Age = 29 };
-
-            //Employee[] employees = { E01, E02, E03, E04 };
-
-            //Helper.PrintArray(employees);
-            //Helper.BubbleSort(employees);
-            //Helper.PrintArray(employees); 
-            #endregion
-
-            #region built-in interface Generic IEquatable
-
-            //Employee E01 = new Employee() { Id = 1, Name = "Ahmed", Salary = 12000, Age = 31 };
-            //Employee E02 = new Employee() { Id = 2, Name = "Ali", Salary = 11000, Age = 34 };
-            //Employee E03 = new Employee() { Id = 3, Name = "Omar", Salary = 13000, Age = 32 };
-            //Employee E04 = new Employee() { Id = 4, Name = "Mona", Salary = 19000, Age = 29 };
-
-            ////Employee[] employees = { E01, E02, E03, E04 };
-
-            ////int Index = Helper<Employee>.LinearSearch(employees, E03);
-
-            ////Console.WriteLine($"Index: {Index}");
-
-            //if (E01.Equals(E02))
-            //    Console.WriteLine("E01 == E02");
-            //else
-            //    Console.WriteLine("E01 != E02"); 
-            #endregion
-
-            #region built-in interface Generic IEqualityComparer
-
-            //Employee E01 = new Employee() { Id = 1, Name = "Ahmed", Salary = 12000, Age = 31 };
-            //Employee E02 = new Employee() { Id = 2, Name = "Ali", Salary = 11000, Age = 34 };
-            //Employee E03 = new Employee() { Id = 3, Name = "Omar", Salary = 13000, Age = 32 };
-            //Employee E04 = new Employee() { Id = 4, Name = "Mona", Salary = 19000, Age = 29 };
-
-            //Employee[] employees = { E01, E02, E03, E04 };
-
-            ////int Index = Helper.LinearSearch(employees, new Employee() { Id = 2, Name = "Ali", Salary = 11000, Age = 34 });
-            //int Index = Helper.LinearSearch(employees, new Employee() { Name = "Ali" } , new EmployeeEqualityComparerName());
-
-            //Console.WriteLine($"Index: {Index}");
-
-
-            #endregion
-
-            #region built-in interface Generic IEqualityComparer
-
-            //Employee E01 = new Employee() { Id = 1, Name = "Ahmed", Salary = 12000, Age = 31 };
-            //Employee E02 = new Employee() { Id = 2, Name = "Ali", Salary = 11000, Age = 34 };
-            //Employee E03 = new Employee() { Id = 3, Name = "Omar", Salary = 13000, Age = 32 };
-            //Employee E04 = new Employee() { Id = 4, Name = "Mona", Salary = 19000, Age = 29 };
-
-            //Employee[] employees = { E01, E02, E03, E04 };
-
-            //Helper.PrintArray(employees);
-            ////Helper.BubbleSort(employees);
-            //Helper.BubbleSort(employees ,  new EmployeeIComparableSalary() );
-            //Helper.PrintArray(employees); 
-
+            //try { list.Add("Four"); } catch (Exception ex) { Console.WriteLine(ex.Message); }
+            //try { Console.WriteLine(list.Get(5)); } catch (Exception ex) { Console.WriteLine(ex.Message); } 
             #endregion
 
 
