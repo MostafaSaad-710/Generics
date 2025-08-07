@@ -10,7 +10,7 @@ namespace demo
     {
 
         // Generic Constraints:
-        // 1. Primary Constraints [0 : 1]
+        /// 1. Primary Constraints [0 : 1]
         //  1.1. class
         //  1.1. struct
         //  1.1. special type point
