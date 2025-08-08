@@ -1,78 +1,173 @@
-﻿namespace Tasks
+﻿namespace Assignment
 {
-
     internal class Program
     {
-        #region Task 01 
-        internal class BananaRipenessRange<T> where T : struct, IComparable<T>
+        #region Q01
+
+        internal class Range<T> where T : IComparable<T>
         {
-            public T Min { get; set; }
-            public T Max { get; set; }
+            private T Max, Min;
 
-
-            public bool IsPerfectBanana(T ripeness)
+            public bool IsInRange(T value)
             {
-                if (ripeness.CompareTo(Min) >= 0 && ripeness.CompareTo(Max) <= 0)
-                    return true;
-                return false;
+                return value.CompareTo(Min) >= 0 && value.CompareTo(Max) <= 0;
+            }
+
+            public double Length()
+            {
+                try
+                {
+                    double maxVal = Convert.ToDouble(Max);
+                    double minVal = Convert.ToDouble(Min);
+                    return maxVal - minVal;
+                }
+                catch
+                {
+                    throw new InvalidOperationException("Type T must be convertible to double to calculate Length.");
+                }
+
             }
 
 
+            public Range(T max, T min)
+            { Max = max; Min = min; }
+            public override string ToString()
+            { return $"Max: {Max} , Min: {Min}"; }
 
-            public BananaRipenessRange(T min, T max)
+        }
+        #endregion
+
+        #region Q02
+        public static void SWAP<T>(ref T X, ref T Y)
+        {
+            T Temp = X;
+            X = Y;
+            Y = Temp;
+        }
+        public static void ArrayList<T>(T[] arr) where T : IComparable<T>
+        {
+            if (arr?.Length > 0)
             {
-                if (typeof(T) != typeof(int) && typeof(T) != typeof(float))
-                    throw new ArgumentException("T must be int or float only.");
-
-                Min = min;
-                Max = max;
+                int left = 0;
+                int right = arr.Length - 1;
+                while (left < right)
+                {
+                    SWAP(ref arr[left], ref arr[right]);
+                    left++;
+                    right--;
+                }
             }
         }
         #endregion
 
-        #region Task 02
-        internal class MultiBox<T>
+        #region Q03
+        public static List<int> GetEvenNumbers(List<int> arr)
         {
-            List<T> list = new List<T>();
+            List<int> values = new List<int>();
 
-            public void InsertItem(T item)
+            foreach (int i in arr)
             {
-                list.Add(item);
+                if (i % 2 == 0)
+                {
+                    values.Add(i);
+                }
             }
-            public List<T> GetAllItems()
-            {
-                return list;
-            }
-            public int Count()
-            {
-                return list.Count;
-            }
-            public bool IsEmpty()
-            {
-                return list.Count == 0;
-            }
+            return values;
         }
         #endregion
 
+        #region Q04
 
+        internal class FixedSizeList<T>
+        {
+            public int Capacity, count = 0;
+
+
+            List<T> values = new List<T>();
+
+            public void Add(T n)
+            {
+                if (count < Capacity)
+                {
+                    values.Add(n);
+                    count++;
+                }
+                else
+                {
+                    throw new InvalidOperationException("List is full. Cannot add more items.");
+                }
+
+            }
+
+            public T Get(int n)
+            {
+                if (n >= 0 && n < count)
+                {
+                    return values[n];
+                }
+                else
+                {
+                    throw new IndexOutOfRangeException("Invalid index.");
+                }
+
+            }
+
+            public FixedSizeList(int capacity)
+            { Capacity = capacity; }
+        }
+        #endregion
         static void Main(string[] args)
         {
-            #region Task 01
-            //BananaRipenessRange<int> bananaRange = new BananaRipenessRange<int>(5, 8);
+            #region Q01
+            //Range<int> range = new Range<int>(30, 20);
 
-            //Console.WriteLine(bananaRange.IsPerfectBanana(7)); // True
-            //Console.WriteLine(bananaRange.IsPerfectBanana(3)); // False 
+            //Console.WriteLine(range);  
+
+            //Console.WriteLine(range.IsInRange(25));  // true
+            //Console.WriteLine(range.IsInRange(35));  // false
+
+            //Console.WriteLine("Length: " + range.Length()); 
             #endregion
 
-            #region Task 02
-            //MultiBox<string> stringbox = new MultiBox<string>();
-            //Console.WriteLine(stringbox.IsEmpty());
+            #region Q02
+            //int[] numbers = { 1, 2, 3, 4, 5 };
 
-            //stringbox.InsertItem("mohamed");
-            //stringbox.InsertItem("Ahmed");
+            //Console.WriteLine("Before Reverse:");
+            //foreach (var n in numbers)
+            //    Console.Write(n + " ");
 
-            //Console.WriteLine( stringbox.Count()); 
+            //ArrayList(numbers);  
+
+            //Console.WriteLine("\nAfter Reverse:");
+            //foreach (var n in numbers)
+            //    Console.Write(n + " "); 
             #endregion
+
+            #region Q03
+            //List<int> input = new List<int> { 1, 2, 3, 4, 5, 6 };
+            //List<int> result = GetEvenNumbers(input);
+
+            //foreach (int num in result)
+            //{
+            //    Console.Write(num + " ");
+            //} 
+            #endregion
+
+            #region Q04
+            //FixedSizeList<string> list = new FixedSizeList<string>(3);
+            //list.Add("One");
+            //list.Add("Two");
+            //list.Add("Three");
+
+            //Console.WriteLine(list.Get(0));
+            //Console.WriteLine(list.Get(1));
+            //Console.WriteLine(list.Get(2));
+
+            //try { list.Add("Four"); } catch (Exception ex) { Console.WriteLine(ex.Message); }
+            //try { Console.WriteLine(list.Get(5)); } catch (Exception ex) { Console.WriteLine(ex.Message); } 
+            #endregion
+
+
         }
     }
 }
